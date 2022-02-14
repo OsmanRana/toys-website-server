@@ -49,6 +49,26 @@ async function run() {
       res.send(result);
     });
 
+    //send toys by brand
+    app.get("/shopByBrand/:brandName", async (req, res) => {
+      const brandName = req.params.brandName;
+      const query = { brand: brandName };
+      const cursor = toysCollections.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //send toys uder $10
+    app.get("/price", async (req, res) => {
+      const query = { price: { $lt: 10 } };
+      const options = {
+        sort: { price: 1 },
+      };
+      const cursor = toysCollections.find(query, options);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     //add new toys
     app.post("/addToys", async (req, res) => {
       const toy = req.body;
